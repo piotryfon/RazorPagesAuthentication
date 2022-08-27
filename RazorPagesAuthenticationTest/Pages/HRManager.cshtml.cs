@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RazorPagesAuthenticationTest.Pages
 {
-    [Authorize(Policy = "MustBelongToHRDepartmnt")]
-    public class HumanResourceModel : PageModel
+    [Authorize(Policy = "HRManagerOnly")]
+    public class HRManagerModel : PageModel
     {
         public void OnGet()
         {

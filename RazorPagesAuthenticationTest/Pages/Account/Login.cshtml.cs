@@ -34,20 +34,23 @@ namespace RazorPagesAuthenticationTest.Pages.Account
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, "admin"),
-                    new Claim(ClaimTypes.Email, "admin@o2.pl")
+                    new Claim(ClaimTypes.Email, "admin@o2.pl"),
+                    new Claim("Department", "HR"),
+                    new Claim("Admin", ""),
+                    //new Claim("Manager", ""),
                 };
                 var identity = new ClaimsIdentity(claims, "MyCookieAuth");
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
 
                 await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal); //serializuje na string, szyfruje i zapisuje jako cookie
 
-                TempData["Message"] = "Logged";
-
-                return RedirectToPage("/Index");
+                return RedirectToPage("/Index", TempData["Message"] = $"Logged as {Credential.UserName}");
             }
+
+            TempData["Message"] = $"Login failed";
+
             return Page();
         }
-       
     }
     public class Credential
     {

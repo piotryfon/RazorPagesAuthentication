@@ -28,6 +28,20 @@ namespace RazorPagesAuthenticationTest
             {
                 options.Cookie.Name = "MyCookieAuth";
                 options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("MustBelongToHRDepartmnt", policy => policy
+                    .RequireClaim("Department", "HR"));
+
+                options.AddPolicy("AdminOnly", policy => policy
+                    .RequireClaim("Admin"));
+
+                options.AddPolicy("HRManagerOnly", policy => policy
+                    .RequireClaim("Department", "HR") 
+                    .RequireClaim("Manager"));
             });
 
             services.AddRazorPages();

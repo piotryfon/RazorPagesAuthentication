@@ -42,7 +42,12 @@ namespace RazorPagesAuthenticationTest.Pages.Account
                 var identity = new ClaimsIdentity(claims, "MyCookieAuth");
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal); //serializuje na string, szyfruje i zapisuje jako cookie
+                var authProperties = new AuthenticationProperties()
+                {
+                    IsPersistent = Credential.RememberMe
+                };
+
+                await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal, authProperties); //serializuje na string, szyfruje i zapisuje jako cookie
 
                 return RedirectToPage("/Index", TempData["Message"] = $"Logged as {Credential.UserName}");
             }
@@ -57,8 +62,12 @@ namespace RazorPagesAuthenticationTest.Pages.Account
         [Required]
         [Display(Name = "User Name")]
         public string UserName { get; set; }
+
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [Display(Name = "Remember Me")]
+        public bool RememberMe { get; set; }
     }
 }
